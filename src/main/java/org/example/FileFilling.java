@@ -13,16 +13,18 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 public class FileFilling {
-    public static ArrayList<String> id_in_xml = new ArrayList<>();
+    public static ArrayList<Long> id_in_xml = new ArrayList<>();
     public void write() throws IOException {
-
 
         final String fileName = "src/file/Routes.xml";
         File file = new File(fileName);
@@ -40,40 +42,41 @@ public class FileFilling {
             XMLHandler handler = new XMLHandler();
             headElement = document.createElement("Routes");
             document.appendChild(headElement);
-                    try{
-                    parser.parse(file, handler);
-                    } catch (org.xml.sax.SAXParseException e){}
 
-                    for (ElementXML e : ElementXML.elementsXML) {
-                        if(!id_in_xml.contains(e.id)) {
-                            Element routeElement = document.createElement("Route");
-                            routeElement.appendChild(getRouteElements(document, "id", e.id));
-                            routeElement.appendChild(getRouteElements(document, "name", e.name));
-                            routeElement.appendChild(getRouteElements(document, "creationDate", e.creationDate));
-                            routeElement.appendChild(getRouteElements(document, "coordinates", e.coordinates));
-                            routeElement.appendChild(getRouteElements(document, "from", e.from));
-                            routeElement.appendChild(getRouteElements(document, "to", e.to));
-                            routeElement.appendChild(getRouteElements(document, "distance", e.distance));
-                            headElement.appendChild(routeElement);
-                            id_in_xml.add(e.id);
-                        }
-                    }
+            try {
+                parser.parse(file, handler);
+            } catch (org.xml.sax.SAXParseException e) {
+            }
 
+            /*for (ElementXML e : ElementXML.elementsXML) {
+                if (!id_in_xml.contains(e.id)) {
+                    Element routeElement = document.createElement("Route");
+                    routeElement.appendChild(getRouteElements(document, "id", e.id));
+                    routeElement.appendChild(getRouteElements(document, "name", e.name));
+                    routeElement.appendChild(getRouteElements(document, "creationDate", e.creationDate));
+                    routeElement.appendChild(getRouteElements(document, "coordinates", e.coordinates));
+                    routeElement.appendChild(getRouteElements(document, "from", e.from));
+                    routeElement.appendChild(getRouteElements(document, "to", e.to));
+                    routeElement.appendChild(getRouteElements(document, "distance", e.distance));
+                    headElement.appendChild(routeElement);
+                    id_in_xml.add(e.id);
+                }
+            }*/
 
             for (Route r : Route.routes) {
-                if(!id_in_xml.contains((String.valueOf(r.getId())))) {
+
                     Element routeElement = document.createElement("Route");
                     routeElement.appendChild(getRouteElements(document, "id", String.valueOf(r.getId())));
                     routeElement.appendChild(getRouteElements(document, "name", r.getName()));
-                    routeElement.appendChild(getRouteElements(document, "creationDate", r.getCreationDateString()));
+                SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    routeElement.appendChild(getRouteElements(document, "creationDate", formater.format(r.getCreationDate())));
                     routeElement.appendChild(getRouteElements(document, "coordinates", r.getCoordinates()));
                     routeElement.appendChild(getRouteElements(document, "from", r.getFrom()));
                     routeElement.appendChild(getRouteElements(document, "to", r.getTo()));
                     routeElement.appendChild(getRouteElements(document, "distance", Double.toString(r.getDistance())));
                     headElement.appendChild(routeElement);
-                    id_in_xml.add(String.valueOf(r.getId()));
+
                 }
-            }
 
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -81,11 +84,10 @@ public class FileFilling {
             DOMSource source = new DOMSource(document);
             StreamResult result = new StreamResult(file);
             transformer.transform(source, result);
+            id_in_xml.clear();
         } catch (SAXException | TransformerException | ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
 
@@ -97,7 +99,8 @@ public class FileFilling {
 
 }
 class XMLHandler extends DefaultHandler {
-    String id, creationDate, name, coordinates, from, to, distance,  lastElementName;
+    String id, creationDate, name, coordinates, from, to, distance,  lastElementName, findText;
+    ArrayList <Float> findNum = new ArrayList<Float>();
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         lastElementName = qName;
@@ -139,7 +142,48 @@ class XMLHandler extends DefaultHandler {
                 (coordinates != null && !coordinates.isEmpty()) && (from != null && !from.isEmpty()) && (to != null && !to.isEmpty()) &&
                 (distance != null && !distance.isEmpty()))
         {
-            ElementXML.elementsXML.add(new ElementXML(id, creationDate, name, coordinates, from, to, distance));
+            Long rId = Long.parseLong(id);
+            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+            findNumers(coordinates);
+            double coordinatesX = (double) findNum.get(0);
+            double coordinatesY = (double) findNum.get(1);
+            findNum.clear();
+
+            findNumers(from);
+            float fromX = findNum.get(0);
+            long fromY =  Math.round(findNum.get(1));
+            int fromZ =  Math.round(findNum.get(2));
+            String fromName;
+            try {
+                fromName = String.valueOf(findNum.get(3));
+            } catch (IndexOutOfBoundsException e){
+                fromName = findText;
+            }
+
+            findNum.clear();
+
+            findNumers(to);
+            double toX = (double) findNum.get(0);
+            double toY = (double) findNum.get(1);
+            double toZ = (double) findNum.get(2);
+            String toName;
+            try {
+                toName = String.valueOf(findNum.get(3));
+            } catch (IndexOutOfBoundsException e){
+                toName = findText;
+            }
+            findNum.clear();
+
+            Double rDistance = Double.parseDouble(distance);
+
+            try {
+                Date rCreationDate = formater.parse(creationDate);
+                var route = new Route(rId, rCreationDate, name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName,
+                        toX, toY, toZ, toName, rDistance);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
             id = null;
             creationDate = null;
             name = null;
@@ -149,10 +193,21 @@ class XMLHandler extends DefaultHandler {
             distance = null;
         }
     }
+    private void findNumers(String str){
+        String parts[] = str.split(" ");
+
+        for (int i=0; i<parts.length; i++) {
+            try {
+                findNum.add(Float.parseFloat(parts[i]));
+            } catch(java.lang.NumberFormatException e){
+                findText = parts[i];
+            }
+        }
+    }
 
 }
 
-class ElementXML {
+/*class ElementXML {
     public static ArrayList<ElementXML> elementsXML = new ArrayList<>();
     String id, creationDate, name, coordinates, from, to, distance;
     public ElementXML(String id, String creationDate, String name, String coordinates, String from, String to, String distance){
@@ -166,3 +221,4 @@ class ElementXML {
     }
 
 }
+*/

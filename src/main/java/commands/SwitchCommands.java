@@ -43,8 +43,6 @@ public class SwitchCommands {
             }
             case "clear" -> {
                 Clear.clear();
-                var fileFill = new FileFilling();
-                fileFill.write();
                 s = br.readLine();
                 switchCommands(s, br);
             }

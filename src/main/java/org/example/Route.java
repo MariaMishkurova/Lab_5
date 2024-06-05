@@ -7,17 +7,15 @@ public class Route implements Cloneable {
     public static ArrayList<Long> used_id = new ArrayList<>();
     public static ArrayDeque<Route> routes;
     public static Date arrayDequeCreation;
-    SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     static {
         routes = new ArrayDeque<>();
         arrayDequeCreation = new Date();
     }
 
-    public Route(String name, double coordinatesX, double coordinatesY, float fromX, long fromY, int fromZ, String fromName,
-                 double toX, double toY, double toZ, String toName, Double distance) {
+    private Route(String name, double coordinatesX, double coordinatesY, float fromX, long fromY, int fromZ, String fromName,
+                 double toX, double toY, double toZ, String toName) {
         this.name = name;
-        this.distance = distance;
         coordinates = new Coordinates(coordinatesX, coordinatesY);
         from = new LocationFrom(fromX, fromY, fromZ, fromName);
         this.toX = toX;
@@ -25,37 +23,47 @@ public class Route implements Cloneable {
         this.toZ = toZ;
         to = new LocationTo(toX, toY, toZ, toName);
     }
+    public Route(String name, double coordinatesX, double coordinatesY, float fromX, long fromY, int fromZ, String fromName,
+                 double toX, double toY, double toZ, String toName, Double distance) {
+        this(name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName, toX, toY, toZ, toName);
+        this.distance = distance;
+        this.creationDate = new Date();
+        this.id = calculateId();
+        if(!used_id.contains(this.id)){
+            routes.add(this);
+            used_id.add(this.id);
+        }
+    }
     public Route(Long id, Date creationDate, String name, double coordinatesX, double coordinatesY, float fromX, long fromY, int fromZ, String fromName,
                  double toX, double toY, double toZ, String toName, Double distance){
-        this(name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName, toX, toY, toZ, toName, distance);
+        this(name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName, toX, toY, toZ, toName);
         this.id = id;
+        this.distance = distance;
         this.creationDate = creationDate;
+        if(!used_id.contains(this.id)){
+            routes.add(this);
+            used_id.add(this.id);
+        }
     }
 
-    {
-        routes.add(this);
-        if(this.id==null){this.id = calculateId();}
-        used_id.add(this.id);
-        if(this.creationDate == null) {
-            this.creationDate = new Date();
-        }
-        this.creationDateString = formater.format(this.creationDate);
-    }
+
+
 
     private Long id;
     private long fromY;
-    private String name, creationDateString, fromName, toName;
+    private String name, fromName, toName;
     private Coordinates coordinates;
     private java.util.Date creationDate;
     private LocationFrom from;
     private LocationTo to;
-    private double distance, coordinatesX, coordinatesY, toX, toY, toZ;
+    private double coordinatesX, coordinatesY, toX, toY, toZ;
+    private Double distance;
     private float fromX;
     private int fromZ;
     @Override
     public String toString() {
         return purple + "Маршрут " + this.id + " \"" + this.name + "\"" + black + ": координаты: " + this.coordinates +
-                ", дата создания: " + this.creationDateString + ", старт маршрута: " + this.from + ", конец маршрута: " + this.to +
+                ", дата создания: " + this.creationDate + ", старт маршрута: " + this.from + ", конец маршрута: " + this.to +
                 ", расстояние: " + this.distance;
     }
 
@@ -202,8 +210,8 @@ public class Route implements Cloneable {
     public double toValue() {
         return (this.toX + this.toY + this.toZ);
     }
-    public String getCreationDateString(){
-        return this.creationDateString;
+    public Date getCreationDate(){
+        return this.creationDate;
     }
     public static final String black = "\u001B[0m";
     public static final String purple = "\u001B[35m";

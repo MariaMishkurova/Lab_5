@@ -1,19 +1,13 @@
 package org.example;
-import commands.Filter_distance;
-import commands.SwitchCommands;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import commands.SwitchCommands;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
 
-    public static void main (String[] args) throws IOException, ParserConfigurationException, SAXException {
+    public static void main (String[] args) throws IOException{
         var fileFill = new FileFilling();
         fileFill.write();
         /*для проверок

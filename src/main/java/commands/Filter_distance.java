@@ -1,10 +1,8 @@
 package commands;
 
 import org.example.Route;
-
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Iterator;
 
 public class Filter_distance {
     public static void filter_distance(BufferedReader br) throws IOException {
