@@ -8,18 +8,10 @@ public class Remove {
     private static String input;
     private static long id;
 
-    public static void remove_by_id(BufferedReader br) throws IOException {
+    public static void remove_by_id(Long id) throws IOException {
         if (Route.routes.isEmpty()) {
             System.out.println("\u001B[31mДействие невозможно\u001B[0m");
         } else {
-            System.out.println("Введите id");
-            input = br.readLine();
-            try {
-                id = Long.parseLong(input);
-            } catch (NumberFormatException e) {
-                System.out.println("\u001B[31mВведите корректное значение\u001B[0m");
-                remove_by_id(br);
-            }
             if (!Route.used_id.contains(id)) {
                 System.out.println("\u001B[31mЭлемент не найден\u001B[0m");
             } else {
@@ -50,12 +42,10 @@ public class Remove {
         }
     }
 
-    public static void remove_lower(BufferedReader br) throws IOException {
-        System.out.println("Введите название элемента, до которого желаете всё удалить");
-        String name = br.readLine();
+    public static void remove_lower(BufferedReader br, String name) throws IOException {
         if(!existName(name)) {
-            System.out.println("\u001B[31mВведите корректное имя\u001B[0m");
-            remove_lower(br);
+            System.out.println("\u001B[31mВведите корректный запрос\u001B[0m");
+            SwitchCommands.switchCommands(br);
         } else if(Route.routes.getFirst().getName().equals(name)){
             System.out.println("\u001B[31mДействие невозможно\u001B[0m");
         } else {
@@ -70,12 +60,10 @@ public class Remove {
         }
     }
 
-    public static void remove_greater(BufferedReader br) throws IOException {
-        System.out.println("Введите название элемента, после которого желаете всё удалить");
-        String name = br.readLine();
+    public static void remove_greater(BufferedReader br, String name) throws IOException {
         if(!existName(name)){
-            System.out.println("\u001B[31mВведите корректное имя\u001B[0m");
-            remove_greater(br);
+            System.out.println("\u001B[31mВведите корректный запрос\u001B[0m");
+            SwitchCommands.switchCommands(br);
         } else if(Route.routes.getLast().getName().equals(name)){
             System.out.println("\u001B[31mДействие невозможно\u001B[0m");
         }
@@ -94,12 +82,7 @@ public class Remove {
             }
         }
     }
-    public static void remove_distance(BufferedReader br) throws IOException {
-        System.out.println("Введите значение дистанции, маршрруты с которым желаете удалить");
-        double distance;
-        String input = br.readLine();
-        try {
-            distance = Double.parseDouble(input);
+    public static void remove_distance(Double distance) throws IOException {
             Iterator<Route> iterator = Route.routes.iterator();
             if (!existDistance(distance)) {
                 System.out.println("\u001B[31mДействие невозможно\u001B[0m");
@@ -111,10 +94,6 @@ public class Remove {
                         System.out.println("\u001B[32mЭлемент коллекции удалён\u001B[0m");
                     }
                 }
-            }
-        } catch(NumberFormatException e){
-                System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
-                remove_distance(br);
             }
         }
     private static boolean existName(String name){

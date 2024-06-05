@@ -7,44 +7,61 @@ import org.example.FileFilling;
 import org.example.Route;
 
 public class SwitchCommands {
-    public static void switchCommands(String s, BufferedReader br) throws IOException {
-        switch (s) {
+    public static void switchCommands(BufferedReader br) throws IOException {
+        String s = br.readLine();
+        String[] parts = s.split(" ");
+        if(parts[0].equals("update") || parts[0].equals("remove_id") || parts[0].equals("execute_script") ||
+                parts[0].equals("remove_greater") || parts[0].equals("remove_lower") || parts[0].equals("filter_distance") || parts[0].equals("remove_distance")){
+            if(parts.length != 2){System.out.println("\u001B[31mВведите корректный запрос (неверное число аргументов)\u001B[0m");
+            switchCommands(br);}
+        } else {
+            if(parts.length != 1 ){
+            System.out.println("\u001B[31mВведите корректный запрос (неверное число аргументов)\u001B[0m");
+            switchCommands(br);
+            }
+        }
+        String res = parts[0];
+        switch (res) {
             case "help" -> {
                 Help.help();
-                s = br.readLine();
-                switchCommands(s, br);
+                switchCommands(br);
             }
             case "info" -> {
                 Info.info();
-                s = br.readLine();
-                switchCommands(s, br);
+                switchCommands(br);
             }
             case "show" -> {
                 Show.show();
-                s = br.readLine();
-                switchCommands(s, br);
+                switchCommands(br);
             }
             case "add" -> {
                 var add = new Add();
                 add.addNew(br);
-                s = br.readLine();
-                switchCommands(s, br);
+                switchCommands(br);
             }
             case "update" -> {
-                System.out.println("Введите id");
-                Update.update(br);
-                s = br.readLine();
-                switchCommands(s, br);
+                try {
+                    Long id = Long.parseLong(parts[1]);
+                    Update.update(br, id);
+                    switchCommands(br);
+                } catch (NumberFormatException e){
+                    System.out.println("\u001B[31mВведите корректный запрос(неверный аргумент)\u001B[0m");
+                    switchCommands(br);
+                }
             }
             case "remove_id" -> {
-                Remove.remove_by_id(br);
-                s = br.readLine();
-                switchCommands(s, br);
+                try {
+                    Long id = Long.parseLong(parts[1]);
+                    Remove.remove_by_id(id);
+                    switchCommands(br);
+                } catch (NumberFormatException e){
+                    System.out.println("\u001B[31mВведите корректный запрос(неверный аргумент)\u001B[0m");
+                    switchCommands(br);
+                }
             }
             case "clear" -> {
                 Clear.clear();
-                s = br.readLine();
-                switchCommands(s, br);
+                switchCommands(br);
             }
             case "save" -> {
                 if(!Route.routes.isEmpty()) {
@@ -54,48 +71,51 @@ public class SwitchCommands {
                 } else {
                     System.out.println("\u001B[31mСохранять нечего\u001B[0m");
                 }
-                s = br.readLine();
-                switchCommands(s, br);
+                switchCommands(br);
             }
             case "exit" -> System.exit(0);
 
             case "remove_head" -> {
                 Remove.remove_head();
-                s = br.readLine();
-                switchCommands(s, br);
+                switchCommands(br);
             }
             case "remove_lower" -> {
-                Remove.remove_lower(br);
-                s = br.readLine();
-                switchCommands(s, br);
+                Remove.remove_lower(br, parts[1]);
+                switchCommands(br);
             }
             case "remove_greater" -> {
-                Remove.remove_greater(br);
-                s = br.readLine();
-                switchCommands(s, br);
+                Remove.remove_greater(br, parts[1]);
+                switchCommands(br);
             }
             case "remove_distance" -> {
-                Remove.remove_distance(br);
-                s = br.readLine();
-                switchCommands(s, br);
+                try {
+                    Double distance = Double.parseDouble(parts[1]);
+                    Remove.remove_distance(distance);
+                    switchCommands(br);
+                } catch (NumberFormatException e){
+                    System.out.println("\u001B[31mВведите корректный запрос(неверный аргумент)\u001B[0m");
+                    switchCommands(br);
+                }
             }
             case "min_to" -> {
                 Min_to.min_to();
-                s = br.readLine();
-                switchCommands(s, br);
+                switchCommands(br);
             }
             case "filter_distance" -> {
-                System.out.println("Введите значение дистанции");
-                Filter_distance.filter_distance(br);
-                s = br.readLine();
-                switchCommands(s, br);
+                try {
+                    Double distance = Double.parseDouble(parts[1]);
+                    Filter_distance.filter_distance(distance);
+                    switchCommands(br);
+                } catch (NumberFormatException e){
+                    System.out.println("\u001B[31mВведите корректный запрос(неверный аргумент)\u001B[0m");
+                    switchCommands(br);
+                }
             }
 
             default -> {
                 System.out.println("\u001B[31mПожалуйста, введите корректную команду\u001B[0m");
                 Help.help();
-                s = br.readLine();
-                switchCommands(s, br);
+                switchCommands(br);
             }
         }
     }
