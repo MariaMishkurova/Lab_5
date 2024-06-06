@@ -28,12 +28,11 @@ import static Main_part.Main.getHome;
 public class FileFilling {
     public static ArrayList<Long> id_in_xml = new ArrayList<>();
     String fileName;
-    File file;
     public void write() throws IOException {
 
         fileName = getHome() + "/Route.xml";
         File file = new File(fileName);
-        RandomAccessFile access = new RandomAccessFile(fileName, "rwd");
+        new RandomAccessFile(fileName, "rwd");
         /* Временный файл и директория:
         fileName = getHome();
         file = File.createTempFile("Route", ".xml", directory);
@@ -97,7 +96,7 @@ public class FileFilling {
 }
 class XMLHandler extends DefaultHandler {
     String id, creationDate, name, coordinates, from, to, distance,  lastElementName, findText;
-    ArrayList <Float> findNum = new ArrayList<Float>();
+    ArrayList <Float> findNum = new ArrayList<>();
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         lastElementName = qName;
@@ -176,7 +175,7 @@ class XMLHandler extends DefaultHandler {
 
             try {
                 Date rCreationDate = formater.parse(creationDate);
-                var route = new Route(rId, rCreationDate, name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName,
+                new Route(rId, rCreationDate, name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName,
                         toX, toY, toZ, toName, rDistance);
             } catch (ParseException e) {
                 throw new RuntimeException(e);

@@ -1,0 +1,17 @@
+info
+add
+3
+3
+3
+3
+3
+3
+3
+3
+3
+3
+3
+3
+save
+show
+execute_script src/file/script.txt

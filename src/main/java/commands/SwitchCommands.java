@@ -38,13 +38,13 @@ public class SwitchCommands {
                 }
                 case "add" -> {
                     var add = new Add();
-                    add.addNew(br);
+                    add.addNew(br, true);
                     switchCommands(br);
                 }
                 case "update" -> {
                     try {
                         Long id = Long.parseLong(parts[1]);
-                        Update.update(br, id);
+                        Update.update(br, id, true);
                         switchCommands(br);
                     } catch (NumberFormatException e) {
                         System.out.println(Style.RED + "Введите корректный запрос(неверный id)" + Style.BLACK);

@@ -2,7 +2,7 @@ package Main_part;
 
 import java.util.*;
 
-public class Route implements Cloneable {
+public class Route{
     public static ArrayList<Long> used_id = new ArrayList<>();
     public static ArrayDeque<Route> routes;
     public static Date arrayDequeCreation;
@@ -45,9 +45,6 @@ public class Route implements Cloneable {
         }
     }
 
-
-
-
     private Long id;
     private long fromY;
     private String name, fromName, toName;
@@ -55,10 +52,10 @@ public class Route implements Cloneable {
     private java.util.Date creationDate;
     private LocationFrom from;
     private LocationTo to;
-    private double coordinatesX, coordinatesY, toX, toY, toZ;
-    private Double distance;
+    private double coordinatesX, coordinatesY, toX, toZ;
+    private Double distance, toY;
     private float fromX;
-    private int fromZ;
+    private Integer fromZ;
     @Override
     public String toString() {
         return purple + "Маршрут " + this.id + " \"" + this.name + "\"" + black + ": координаты: " + this.coordinates +

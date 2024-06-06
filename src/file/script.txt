@@ -1,6 +1,3 @@
 show
-remove_head
-remove_id 11646
-show
-help
-execute_script src/file/1script.txt
+remove_id 65477
+execute_script src/file/script2.txt

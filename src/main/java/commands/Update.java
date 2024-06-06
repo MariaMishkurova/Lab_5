@@ -6,9 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 public class Update {
-    static String input;
-    static long id;
-    public static void update(BufferedReader br, Long id) throws IOException {
+    public static void update(BufferedReader br, Long id, boolean console) throws IOException {
 
         if(!Route.used_id.contains(id)){
             System.out.println(Style.RED + "Элемент не найден" + Style.BLACK);
@@ -16,7 +14,7 @@ public class Update {
             for (Route r : Route.routes) {
                 if (r.getId() == id) {
                     var add = new Add();
-                    add.updateRoute(r, br);
+                    add.updateRoute(r, br, console);
                 }
             }
         }

@@ -82,7 +82,7 @@ public class Remove {
             }
         }
     }
-    public static void remove_distance(Double distance) throws IOException {
+    public static void remove_distance(Double distance) {
             Iterator<Route> iterator = Route.routes.iterator();
             if (!existDistance(distance)) {
                 System.out.println(Style.RED + "Действие невозможно" + Style.BLACK);

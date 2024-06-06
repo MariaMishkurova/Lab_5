@@ -3,6 +3,7 @@ import Main_part.*;
 import Exceptions.ImpossibleFieldException;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Add {
     String name, fromName, toName;
@@ -11,14 +12,18 @@ public class Add {
     long fromY;
     int fromZ;
 
-    private void add(BufferedReader br) throws IOException {
+    private void add(BufferedReader br, boolean console) throws IOException {
 
-        System.out.print("Введите название: ");
+        if(console){System.out.print("Введите название: ");}
         String input = br.readLine();
-        if (!input.equals("")) {
+        if (!input.isEmpty()) {
             name = input;
         } else {
-            while (input.equals("")) {
+            if(!console){
+                System.out.println(Style.RED + "В файле указаны недопустимые аргументы" + Style.BLACK);
+                return;
+            }
+            while (input.isEmpty()) {
                 try {
                     throw new ImpossibleFieldException();
                 } catch (ImpossibleFieldException e) {
@@ -31,27 +36,43 @@ public class Add {
         }
 
 
-        System.out.print("Введите координату x:");
-        coordinatesX = floatCount(br);
+        if(console) {
+            System.out.print("Введите координату x:");
+        }
+        coordinatesX = floatCount(br, console);
 
-        System.out.print("Введите координату y: ");
-        coordinatesY = floatCount(br);
+        if(console) {
+            System.out.print("Введите координату y: ");
+        }
+        coordinatesY = floatCount(br, console);
 
-        System.out.print("Введите координаты начала маршрута x: ");
-        fromX =  floatCount(br);
+        if(console) {
+            System.out.print("Введите координаты начала маршрута x: ");
+        }
+        fromX =  floatCount(br, console);
 
-        System.out.print("y(в виде целого числа): ");
-        fromY = intCount(br);
+        if(console) {
+            System.out.print("y(в виде целого числа): ");
+        }
+        fromY = intCount(br, console);
 
-        System.out.print("z(в виде целого числа): ");
-        fromZ = intCountNotNull(br);
+        if(console) {
+            System.out.print("z(в виде целого числа): ");
+        }
+        fromZ = intCountNotNull(br, console);
 
-        System.out.print("Введите название начала маршрута: ");
+        if(console) {
+            System.out.print("Введите название начала маршрута: ");
+        }
         input = br.readLine();
-        if (!input.equals("")) {
+        if (!input.isEmpty()) {
             fromName = input;
         } else {
-            while (input.equals("")) {
+            if(!console){
+                System.out.println(Style.RED + "В файле указаны недопустимые аргументы" + Style.BLACK);
+                return;
+            }
+            while (input.isEmpty()) {
                 try {
                     throw new ImpossibleFieldException();
                 } catch (ImpossibleFieldException e) {
@@ -63,25 +84,35 @@ public class Add {
             fromName = input;
         }
 
-        System.out.print("Введите координаты конца маршрута x: ");
-        toX = floatCount(br);
+        if(console) {
+            System.out.print("Введите координаты конца маршрута x: ");
+        }
+        toX = floatCount(br, console);
 
-        System.out.print("y: ");
-        toY = floatCountNotNull(br);
+        if(console) {
+            System.out.print("y: ");
+        }
+        toY = floatCountNotNull(br, console);
 
-        System.out.print("z: ");
-        toZ = floatCount(br);
+        if(console) {
+            System.out.print("z: ");
+        }
+        toZ = floatCount(br, console);
 
-        System.out.print("Введите название конца маршрута: ");
+        if(console) {
+            System.out.print("Введите название конца маршрута: ");
+        }
         input = br.readLine();
         toName = input;
 
-        System.out.print("Введите длину дистанции: ");
-        distance = distanceCount(br);
+        if(console) {
+            System.out.print("Введите длину дистанции: ");
+        }
+        distance = distanceCount(br, console);
 
     }
-    public void updateRoute(Route r, BufferedReader br) throws IOException {
-        add(br);
+    public void updateRoute(Route r, BufferedReader br, boolean console) throws IOException {
+        add(br, console);
         r.setName(name);
         r.setCoordinatesX(coordinatesX);
         r.setCoordinatesY(coordinatesY);
@@ -98,21 +129,61 @@ public class Add {
     }
 
 
-    public void addNew(BufferedReader br) throws IOException {
-        add(br);
+    public void addNew(BufferedReader br, boolean console) throws IOException {
+        add(br, console);
         var route = new Route(name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName, toX, toY, toZ, toName, distance);
         System.out.println(Style.GREEN + "Элемент создан" + Style.BLACK);
     }
 
 
 
-        static Float floatCountNotNull (BufferedReader br) throws IOException {
+        static Float floatCountNotNull (BufferedReader br, boolean console) throws IOException {
                 String input = br.readLine();
                 float a;
                 try {
                     if (!input.isEmpty()) {
                         a = Float.parseFloat(input);
+                    } else
+                    {
+                        if(console){
+                            do {
+                                try {
+                                    throw new ImpossibleFieldException();
+                                } catch (ImpossibleFieldException e) {
+                                    System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
+                                    input = br.readLine();
+                                }
+                            } while (input.isEmpty());
+                            a = Float.parseFloat(input);
+                        } else {
+                            System.out.println(Style.RED + "В файле указаны недопустимые аргументы" + Style.BLACK);
+                            var brConsole = new BufferedReader(new InputStreamReader(System.in));
+                            SwitchCommands.switchCommands(brConsole);
+                            return null;
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    if(console){
+                        System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
+                        a = floatCountNotNull(br, console);
                     } else {
+                        System.out.println(Style.RED + "В файле указаны недопустимые аргументы" + Style.BLACK);
+                        var brConsole = new BufferedReader(new InputStreamReader(System.in));
+                        SwitchCommands.switchCommands(brConsole);
+                        return null;
+                    }
+                }
+                return a;
+            }
+
+        static int intCountNotNull (BufferedReader br, boolean console) throws IOException {
+            String input = br.readLine();
+            int a;
+            try {
+                if (!input.isEmpty()) {
+                    a = Integer.parseInt(input);
+                } else {
+                    if (console){
                         do {
                             try {
                                 throw new ImpossibleFieldException();
@@ -121,68 +192,75 @@ public class Add {
                                 input = br.readLine();
                             }
                         } while (input.isEmpty());
-                        a = Float.parseFloat(input);
+                        a = Integer.parseInt(input);
+                    } else {
+                        System.out.println(Style.RED + "В файле указаны недопустимые аргументы" + Style.BLACK);
+                        var brConsole = new BufferedReader(new InputStreamReader(System.in));
+                        SwitchCommands.switchCommands(brConsole);
+                        return 0;
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
-                    a = floatCountNotNull(br);
-                }
-                return a;
-            }
-
-        static int intCountNotNull (BufferedReader br) throws IOException {
-            String input = br.readLine();
-            int a;
-            try {
-                if (!input.isEmpty()) {
-                    a = Integer.parseInt(input);
-                } else {
-                    do {
-                        try {
-                            throw new ImpossibleFieldException();
-                        } catch (ImpossibleFieldException e) {
-                            System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
-                            input = br.readLine();
-                        }
-                    } while (input.isEmpty());
-                    a = Integer.parseInt(input);
                 }
             } catch (NumberFormatException e) {
+                if(console){
                 System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
-                a = intCountNotNull(br);
+                a = intCountNotNull(br, console);} else {
+                    System.out.println(Style.RED + "В файле указаны недопустимые аргументы" + Style.BLACK);
+                    var brConsole = new BufferedReader(new InputStreamReader(System.in));
+                    SwitchCommands.switchCommands(brConsole);
+                    return 0;
+                }
             }
             return a;
         }
 
-        private int intCount (BufferedReader br) throws IOException {
+        private int intCount (BufferedReader br, boolean console) throws IOException {
             String input = br.readLine();
             int a;
             try{
                 a = Integer.parseInt(input);
             } catch (NumberFormatException e) {
+                if(console) {
                 System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
-                a = intCount(br);
+                a = intCount(br, console);
+                } else {
+                    System.out.println(Style.RED + "В файле указаны недопустимые аргументы" + Style.BLACK);
+                    var brConsole = new BufferedReader(new InputStreamReader(System.in));
+                    SwitchCommands.switchCommands(brConsole);
+                    return 0;
+                }
             }
             return a;
         }
-        private static Float floatCount (BufferedReader br) throws IOException {
+        private static Float floatCount (BufferedReader br, boolean console) throws IOException {
             String input = br.readLine();
             float a;
             try {
                 a = Float.parseFloat(input);
             } catch (NumberFormatException e) {
-                System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
-                a = floatCount(br);
+                if(console) {System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
+                a = floatCount(br, console);
+                } else{
+                    System.out.println(Style.RED + "В файле указаны недопустимые аргументы" + Style.BLACK);
+                    var brConsole = new BufferedReader(new InputStreamReader(System.in));
+                    SwitchCommands.switchCommands(brConsole);
+                    return null;
+                }
             }
             return a;
         }
-        private static Double distanceCount (BufferedReader br) throws IOException {
+        private static Double distanceCount (BufferedReader br, boolean console) throws IOException {
             String input = br.readLine();
             double a;
             try {
                 if (!input.isEmpty() && Double.parseDouble(input) > 1) {
                     a = Double.parseDouble(input);
                 } else {
+                    if(!console){
+                        System.out.println(Style.RED + "В файле указаны недопустимые аргументы" + Style.BLACK);
+                        var brConsole = new BufferedReader(new InputStreamReader(System.in));
+                        SwitchCommands.switchCommands(brConsole);
+                        return null;
+                    }
                     do {
                         try {
                             throw new ImpossibleFieldException();
@@ -195,8 +273,14 @@ public class Add {
                     a = Double.parseDouble(input);
                 }
             } catch (NumberFormatException e) {
+                if(!console){
+                    System.out.println(Style.RED + "В файле указаны недопустимые аргументы" + Style.BLACK);
+                    var brConsole = new BufferedReader(new InputStreamReader(System.in));
+                    SwitchCommands.switchCommands(brConsole);
+                    return null;
+                }
                 System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
-                a = distanceCount(br);
+                a = distanceCount(br, console);
             }
             return a;
         }
