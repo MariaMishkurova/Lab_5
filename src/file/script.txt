@@ -1,0 +1,6 @@
+show
+remove_head
+remove_id 11646
+show
+help
+execute_script src/file/1script.txt
