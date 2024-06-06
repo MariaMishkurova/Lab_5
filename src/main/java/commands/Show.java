@@ -1,9 +1,10 @@
 package commands;
-import org.example.Route;
+import Main_part.*;
+
 public class Show {
     public static void show(){
         if(Route.routes.isEmpty()){
-            System.out.println("\u001B[31mКоллекция пуста\u001B[0m");
+            System.out.println(Style.RED + "Коллекция пуста" + Style.BLACK);
         }
         for (Route r: Route.routes){
             System.out.println(r);

@@ -1,5 +1,5 @@
-package org.example;
-
+package commands;
+import Main_part.*;
 import Exceptions.ImpossibleFieldException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class Add {
                 try {
                     throw new ImpossibleFieldException();
                 } catch (ImpossibleFieldException e) {
-                    System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
+                    System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
                     System.out.print("Введите название ещё раз: ");
                     input = br.readLine();
                 }
@@ -55,7 +55,7 @@ public class Add {
                 try {
                     throw new ImpossibleFieldException();
                 } catch (ImpossibleFieldException e) {
-                    System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
+                    System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
                     System.out.print("Введите название начала маршрута ещё раз: ");
                     input = br.readLine();
                 }
@@ -94,14 +94,14 @@ public class Add {
         r.setToZ(toZ);
         r.setToName(toName);
         r.setDistance(distance);
-        System.out.println("\u001B[32mЭлемент обновлён\u001B[0m");
+        System.out.println(Style.GREEN + "Элемент обновлён" + Style.BLACK);
     }
 
 
     public void addNew(BufferedReader br) throws IOException {
         add(br);
         var route = new Route(name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName, toX, toY, toZ, toName, distance);
-        System.out.println("\u001B[32mЭлемент создан\u001B[0m");
+        System.out.println(Style.GREEN + "Элемент создан" + Style.BLACK);
     }
 
 
@@ -117,14 +117,14 @@ public class Add {
                             try {
                                 throw new ImpossibleFieldException();
                             } catch (ImpossibleFieldException e) {
-                                System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
+                                System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
                                 input = br.readLine();
                             }
                         } while (input.isEmpty());
                         a = Float.parseFloat(input);
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
+                    System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
                     a = floatCountNotNull(br);
                 }
                 return a;
@@ -141,14 +141,14 @@ public class Add {
                         try {
                             throw new ImpossibleFieldException();
                         } catch (ImpossibleFieldException e) {
-                            System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
+                            System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
                             input = br.readLine();
                         }
                     } while (input.isEmpty());
                     a = Integer.parseInt(input);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
+                System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
                 a = intCountNotNull(br);
             }
             return a;
@@ -160,7 +160,7 @@ public class Add {
             try{
                 a = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
+                System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
                 a = intCount(br);
             }
             return a;
@@ -171,7 +171,7 @@ public class Add {
             try {
                 a = Float.parseFloat(input);
             } catch (NumberFormatException e) {
-                System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
+                System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
                 a = floatCount(br);
             }
             return a;
@@ -187,7 +187,7 @@ public class Add {
                         try {
                             throw new ImpossibleFieldException();
                         } catch (ImpossibleFieldException e) {
-                            System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
+                            System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
                             System.out.print("Введите длину дистанции ещё раз: ");
                             input = br.readLine();
                         }
@@ -195,7 +195,7 @@ public class Add {
                     a = Double.parseDouble(input);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("\u001B[31mПожалуйста, введите корректное значение\u001B[0m");
+                System.out.println(Style.RED + "Пожалуйста, введите корректное значение" + Style.BLACK);
                 a = distanceCount(br);
             }
             return a;

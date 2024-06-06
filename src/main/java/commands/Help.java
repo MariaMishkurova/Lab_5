@@ -1,22 +1,24 @@
 package commands;
+import Main_part.Style;
 
 public class Help{
-    public static final String black = "\u001B[0m";
-    public static final String purple = "\u001B[35m";
     public static void help(){
-        System.out.println(purple + "help" + black + "- вывести справку по доступным командам \n" + purple + "info" + black + " - " +
-                "узнать информацию о коллекции\n" + purple + "show" + black + " - вывести все элементы коллекции\n" + purple +
-                "add" + black + " - добавить новый элемент в коллекцию \n" + purple + "update (id)" + black +
-                " - обновить значение элемента коллекции, id которого равен заданному\n" + purple + "remove_id (id)"
-                + black + " - удалить элемент из коллекции по его id\n" + purple + "clear" + black + " - очистить коллекцию\n" + purple
-                + "save - " + black + "сохранить коллекцию в файл" + "\n" + purple + "execute_script (file_name)" + black + "- " +
-                "считать и исполнить скрипт " + "из указанного файла\n" + purple + "exit " + black + "- завершить программу " +
-                "(без сохранения в файл)\n" + purple + "remove_head" + black + " - вывести первый элемент коллекции и удалить его\n" +
-                purple + "remove_greater (name)" + black + " - удалить из коллекции все элементы, превышающие заданный\n" +
-                purple + "remove_lower (name)" + black + " - удалить из коллекции все элементы, меньшие, чем заданный\n" +
-                purple + "remove_distance (distance) " + black + "- удалить из коллекции все элементы, значение " +
-                "поля distance которого эквивалентно заданному\n" + purple + "min_to" + black + "- вывести любой объект из коллекции," +
-                " значение поля to которого является минимальным\n" + purple + "filter_distance (distance) " + black + " -" +
-                " вывести элементы, значение поля distance которых меньше заданного");
+
+        System.out.println(Style.LINE + "\n" + Style.PURPLE + "help" + Style.BLACK + "- вывести справку по доступным командам \n" + Style.PURPLE + "info" + Style.BLACK + " - " +
+                "узнать информацию о коллекции\n" + Style.PURPLE + "show" + Style.BLACK + " - вывести все элементы коллекции\n" + Style.PURPLE +
+                "add" + Style.BLACK + " - добавить новый элемент в коллекцию \n" + Style.PURPLE + "update (id)" + Style.BLACK +
+                " - обновить значение элемента коллекции, id которого равен заданному\n" + Style.PURPLE + "remove_id (id)"
+                + Style.BLACK + " - удалить элемент из коллекции по его id\n" + Style.PURPLE + "clear" + Style.BLACK + " - очистить коллекцию\n" + Style.PURPLE
+                + "save - " + Style.BLACK + "сохранить коллекцию в файл" + "\n" + Style.PURPLE + "execute_script (file_name)" + Style.BLACK + "- " +
+                "считать и исполнить скрипт " + "из указанного файла\n" + Style.PURPLE + "exit " + Style.BLACK + "- завершить программу " +
+                "(без сохранения в файл)\n" + Style.PURPLE + "remove_head" + Style.BLACK + " - вывести первый элемент коллекции и удалить его\n" +
+                Style.PURPLE + "remove_greater (name)" + Style.BLACK + " - удалить из коллекции все элементы, превышающие заданный\n" +
+                Style.PURPLE + "remove_lower (name)" + Style.BLACK + " - удалить из коллекции все элементы, меньшие, чем заданный\n" +
+                Style.PURPLE + "remove_distance (distance) " + Style.BLACK + "- удалить из коллекции все элементы, значение " +
+                "поля distance которого эквивалентно заданному\n" + Style.PURPLE + "min_to" + Style.BLACK + "- вывести любой объект из коллекции," +
+                " значение поля to которого является минимальным\n" + Style.PURPLE + "filter_distance (distance) " + Style.BLACK + " -" +
+                " вывести элементы, значение поля distance которых меньше заданного\n" + Style.LINE);
+
+
     }
 }

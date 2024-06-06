@@ -1,5 +1,6 @@
-package org.example;
+package Files;
 
+import Main_part.Route;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -22,13 +23,24 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import static Main_part.Main.getHome;
+
 public class FileFilling {
     public static ArrayList<Long> id_in_xml = new ArrayList<>();
+    String fileName;
+    File file;
     public void write() throws IOException {
 
-        final String fileName = "src/file/Routes.xml";
+        fileName = getHome() + "/Route.xml";
         File file = new File(fileName);
-        RandomAccessFile access = new RandomAccessFile("src/file/Routes.xml", "rwd");
+        RandomAccessFile access = new RandomAccessFile(fileName, "rwd");
+        /* Временный файл и директория:
+        fileName = getHome();
+        file = File.createTempFile("Route", ".xml", directory);
+        file.deleteOnExit();
+        directory.deleteOnExit();
+        */
+
 
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -45,23 +57,8 @@ public class FileFilling {
 
             try {
                 parser.parse(file, handler);
-            } catch (org.xml.sax.SAXParseException e) {
+            } catch (org.xml.sax.SAXParseException | IllegalArgumentException e) {
             }
-
-            /*for (ElementXML e : ElementXML.elementsXML) {
-                if (!id_in_xml.contains(e.id)) {
-                    Element routeElement = document.createElement("Route");
-                    routeElement.appendChild(getRouteElements(document, "id", e.id));
-                    routeElement.appendChild(getRouteElements(document, "name", e.name));
-                    routeElement.appendChild(getRouteElements(document, "creationDate", e.creationDate));
-                    routeElement.appendChild(getRouteElements(document, "coordinates", e.coordinates));
-                    routeElement.appendChild(getRouteElements(document, "from", e.from));
-                    routeElement.appendChild(getRouteElements(document, "to", e.to));
-                    routeElement.appendChild(getRouteElements(document, "distance", e.distance));
-                    headElement.appendChild(routeElement);
-                    id_in_xml.add(e.id);
-                }
-            }*/
 
             for (Route r : Route.routes) {
 
@@ -206,19 +203,3 @@ class XMLHandler extends DefaultHandler {
     }
 
 }
-
-/*class ElementXML {
-    public static ArrayList<ElementXML> elementsXML = new ArrayList<>();
-    String id, creationDate, name, coordinates, from, to, distance;
-    public ElementXML(String id, String creationDate, String name, String coordinates, String from, String to, String distance){
-        this.id = id;
-        this.name = name;
-        this.creationDate = creationDate;
-        this.coordinates = coordinates;
-        this.from = from;
-        this.to = to;
-        this.distance = distance;
-    }
-
-}
-*/

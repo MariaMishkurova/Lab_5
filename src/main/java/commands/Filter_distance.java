@@ -1,8 +1,6 @@
 package commands;
 
-import org.example.Route;
-import java.io.BufferedReader;
-import java.io.IOException;
+import Main_part.*;
 
 public class Filter_distance {
     public static void filter_distance(Double distance){
@@ -15,7 +13,7 @@ public class Filter_distance {
                 }
             }
             if (!b){
-                System.out.println("\u001B[31mТаких элементов нет\u001B[0m");
+                System.out.println(Style.RED + "Таких элементов нет" + Style.BLACK);
             }
 
     }

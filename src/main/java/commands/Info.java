@@ -1,5 +1,5 @@
 package commands;
-import org.example.Route;
+import Main_part.Route;
 
 public class Info {
     public static void info(){

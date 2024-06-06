@@ -1,9 +1,10 @@
 package commands;
 
-import org.example.Route;
+import Main_part.Route;
+import Main_part.Style;
+
 import java.util.ArrayList;
 import java.util.Collections;
-
 
 public class Min_to {
     public static void min_to(){
@@ -19,7 +20,7 @@ public class Min_to {
                 }
             }
         } else {
-            System.out.println("\u001B[31mДействие невозможно\u001B[0m");
+            System.out.println(Style.RED + "Действие невозможно" + Style.BLACK);
 
         }
     }

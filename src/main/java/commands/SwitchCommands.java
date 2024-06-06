@@ -2,10 +2,9 @@ package commands;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import org.example.Add;
-import org.example.FileFilling;
-import org.example.Route;
 
+import Files.FileFilling;
+import Main_part.*;
 public class SwitchCommands {
     public static void switchCommands(BufferedReader br) throws IOException {
         String s = br.readLine();
@@ -14,12 +13,12 @@ public class SwitchCommands {
                 parts[0].equals("remove_greater") || parts[0].equals("remove_lower") || parts[0].equals("filter_distance") ||
                 parts[0].equals("remove_distance")) {
                         if (parts.length != 2) {
-                            System.out.println("\u001B[31mВведите корректный запрос (неверное число аргументов)\u001B[0m");
+                            System.out.println(Style.RED + "Введите корректный запрос (неверное число аргументов)" + Style.BLACK);
                                 switchCommands(br);
                         }
         } else {
             if (parts.length != 1) {
-                System.out.println("\u001B[31mВведите корректный запрос (неверное число аргументов)\u001B[0m");
+                System.out.println(Style.RED + "Введите корректный запрос (неверное число аргументов)" + Style.BLACK);
                 switchCommands(br);
             }
         }
@@ -48,7 +47,7 @@ public class SwitchCommands {
                         Update.update(br, id);
                         switchCommands(br);
                     } catch (NumberFormatException e) {
-                        System.out.println("\u001B[31mВведите корректный запрос(неверный id)\u001B[0m");
+                        System.out.println(Style.RED + "Введите корректный запрос(неверный id)" + Style.BLACK);
                         switchCommands(br);
                     }
                 }
@@ -63,7 +62,7 @@ public class SwitchCommands {
                         Remove.remove_by_id(id);
                         switchCommands(br);
                     } catch (NumberFormatException e) {
-                        System.out.println("\u001B[31mВведите корректный запрос(неверный id)\u001B[0m");
+                        System.out.println(Style.RED + "Введите корректный запрос(неверный id)" + Style.BLACK);
                         switchCommands(br);
                     }
                 }
@@ -75,9 +74,9 @@ public class SwitchCommands {
                     if (!Route.routes.isEmpty()) {
                         var fileFill = new FileFilling();
                         fileFill.write();
-                        System.out.println("\u001B[32mЭлементы сохранены\u001B[0m");
+                        System.out.println(Style.GREEN + "Элементы сохранены" + Style.BLACK);
                     } else {
-                        System.out.println("\u001B[31mСохранять нечего\u001B[0m");
+                        System.out.println(Style.RED + "Сохранять нечего" + Style.BLACK);
                     }
                     switchCommands(br);
                 }
@@ -101,7 +100,7 @@ public class SwitchCommands {
                         Remove.remove_distance(distance);
                         switchCommands(br);
                     } catch (NumberFormatException e) {
-                        System.out.println("\u001B[31mВведите корректный запрос(неверное значение дистанции)\u001B[0m");
+                        System.out.println(Style.RED + "Введите корректный запрос(неверное значение дистанции)" + Style.BLACK);
                         switchCommands(br);
                     }
                 }
@@ -115,13 +114,13 @@ public class SwitchCommands {
                         Filter_distance.filter_distance(distance);
                         switchCommands(br);
                     } catch (NumberFormatException e) {
-                        System.out.println("\u001B[31mВведите корректный запрос(неверное значение дистанции)\u001B[0m");
+                        System.out.println(Style.RED + "Введите корректный запрос(неверное значение дистанции)" + Style.BLACK);
                         switchCommands(br);
                     }
                 }
 
                 default -> {
-                    System.out.println("\u001B[31mПожалуйста, введите корректную команду(команды не существует)\u001B[0m");
+                    System.out.println(Style.RED + "Пожалуйста, введите корректную команду(команды не существует)" + Style.BLACK);
                     Help.help();
                     switchCommands(br);
                 }
