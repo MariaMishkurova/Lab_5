@@ -28,12 +28,14 @@ import static Main_part.Main.getHome;
 public class FileFilling {
     public static ArrayList<Long> id_in_xml = new ArrayList<>();
     String fileName;
-    public void write() throws IOException {
 
+    public void write() throws IOException {
+//getHome() - метод для нахождения переменной окружения home
         fileName = getHome() + "/Route.xml";
         File file = new File(fileName);
         new RandomAccessFile(fileName, "rwd");
-        /* Временный файл и директория:
+
+        /* Если нужны временные файл и директория:
         fileName = getHome();
         file = File.createTempFile("Route", ".xml", directory);
         file.deleteOnExit();
@@ -54,6 +56,7 @@ public class FileFilling {
             headElement = document.createElement("Routes");
             document.appendChild(headElement);
 
+            //не получается парсить - значит нечего копировать, не делаем это
             try {
                 parser.parse(file, handler);
             } catch (org.xml.sax.SAXParseException | IllegalArgumentException e) {
@@ -85,8 +88,6 @@ public class FileFilling {
             throw new RuntimeException(e);
         }
     }
-
-
     private static Node getRouteElements(Document doc, String name, String value) {
         Element node = doc.createElement(name);
         node.appendChild(doc.createTextNode(value));
@@ -94,6 +95,7 @@ public class FileFilling {
     }
 
 }
+
 class XMLHandler extends DefaultHandler {
     String id, creationDate, name, coordinates, from, to, distance,  lastElementName, findText;
     ArrayList <Float> findNum = new ArrayList<>();
@@ -191,7 +193,6 @@ class XMLHandler extends DefaultHandler {
     }
     private void findNumers(String str){
         String parts[] = str.split(" ");
-
         for (int i=0; i<parts.length; i++) {
             try {
                 findNum.add(Float.parseFloat(parts[i]));

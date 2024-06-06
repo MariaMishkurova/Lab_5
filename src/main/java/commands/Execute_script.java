@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Execute_script {
     private final static ArrayList<String> executed_scripts = new ArrayList<>();
-
+//fileName - второе (из двух) слово в введённой строке
     public static void execute_script(BufferedReader br, String fileName) throws IOException {
         if (executed_scripts.contains(fileName)) {
             System.out.println("Повторное выполнение скрипта запрещено!!");

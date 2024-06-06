@@ -12,6 +12,11 @@ public class Add {
     long fromY;
     int fromZ;
 
+    //boolean console - true - спецификация метода для вывода в консоль (например, подсказок и повторного ввода ошибочных аргументов)
+    // false - для чтения скрипта - используются во всём классе по одному принципу
+    // BufferedReader br также - либо чтение строки из консоли, либо из файла, передается в параметр уже нужный
+    // в самом классе новый BufferedReader не предлагается - кроме ситуации, когда прерывается чтение скрипта из-за ошибки
+    // и продолжается программа, предлагая новый ввод в консоль
     private void add(BufferedReader br, boolean console) throws IOException {
 
         if(console){System.out.print("Введите название: ");}
@@ -131,7 +136,7 @@ public class Add {
 
     public void addNew(BufferedReader br, boolean console) throws IOException {
         add(br, console);
-        var route = new Route(name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName, toX, toY, toZ, toName, distance);
+        new Route(name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName, toX, toY, toZ, toName, distance);
         System.out.println(Style.GREEN + "Элемент создан" + Style.BLACK);
     }
 
