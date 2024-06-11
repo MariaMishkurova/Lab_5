@@ -1,17 +1,5 @@
 info
-add
-3
-3
-3
-3
-3
-3
-3
-3
-3
-3
-3
-3
+update 2
 save
 show
 execute_script src/file/script.txt

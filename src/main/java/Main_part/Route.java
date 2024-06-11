@@ -1,18 +1,18 @@
 package Main_part;
 
 import java.util.*;
-
 public class Route{
-    public static ArrayList<Long> used_id = new ArrayList<>();
+
     public static ArrayDeque<Route> routes;
     public static Date arrayDequeCreation;
 
     static {
         routes = new ArrayDeque<>();
         arrayDequeCreation = new Date();
+        creationDate = arrayDequeCreation;
     }
 
-    private Route(String name, double coordinatesX, double coordinatesY, float fromX, long fromY, int fromZ, String fromName,
+    /*private Route(String name, double coordinatesX, double coordinatesY, float fromX, long fromY, int fromZ, String fromName,
                  double toX, double toY, double toZ, String toName) {
         this.name = name;
         coordinates = new Coordinates(coordinatesX, coordinatesY);
@@ -21,19 +21,19 @@ public class Route{
         this.toY = toY;
         this.toZ = toZ;
         to = new LocationTo(toX, toY, toZ, toName);
-    }
+    }*/
     public Route(String name, double coordinatesX, double coordinatesY, float fromX, long fromY, int fromZ, String fromName,
                  double toX, double toY, double toZ, String toName, Double distance) {
-        this(name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName, toX, toY, toZ, toName);
+        this.name = name;
+        coordinates = new Coordinates(coordinatesX, coordinatesY);
+        from = new LocationFrom(fromX, fromY, fromZ, fromName);
+        to = new LocationTo(toX, toY, toZ, toName);
         this.distance = distance;
-        this.creationDate = new Date();
         this.id = calculateId();
-        if(!used_id.contains(this.id)){
-            routes.add(this);
-            used_id.add(this.id);
-        }
+        routes.add(this);
     }
-    public Route(Long id, Date creationDate, String name, double coordinatesX, double coordinatesY, float fromX, long fromY, int fromZ, String fromName,
+
+    /*public Route(Long id, Date creationDate, String name, double coordinatesX, double coordinatesY, float fromX, long fromY, int fromZ, String fromName,
                  double toX, double toY, double toZ, String toName, Double distance){
         this(name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName, toX, toY, toZ, toName);
         this.id = id;
@@ -43,13 +43,13 @@ public class Route{
             routes.add(this);
             used_id.add(this.id);
         }
-    }
+    }*/
 
     private Long id;
     private long fromY;
     private String name, fromName, toName;
     private Coordinates coordinates;
-    private java.util.Date creationDate;
+    private static final java.util.Date creationDate;
     private LocationFrom from;
     private LocationTo to;
     private double coordinatesX, coordinatesY, toX, toZ;
@@ -58,8 +58,8 @@ public class Route{
     private Integer fromZ;
     @Override
     public String toString() {
-        return purple + "Маршрут " + this.id + " \"" + this.name + "\"" + black + ": координаты: " + this.coordinates +
-                ", дата создания: " + this.creationDate + ", старт маршрута: " + this.from + ", конец маршрута: " + this.to +
+        return Style.PURPLE + "Маршрут " + this.id + " \"" + this.name + "\"" + Style.BLACK + ": координаты: " + this.coordinates +
+                ", дата создания: " + creationDate + ", старт маршрута: " + this.from + ", конец маршрута: " + this.to +
                 ", расстояние: " + this.distance;
     }
 
@@ -115,9 +115,7 @@ public class Route{
 
     private long calculateId() {
         long a;
-        do {
-            a = Math.round(Math.random() * 99999);
-        } while (used_id.contains(a));
+        a = routes.size() + 1; //размер аррэйдекью еще без этого элемента
         return a;
     }
 
@@ -182,6 +180,9 @@ public class Route{
         this.toName = toName;
         this.to = new LocationTo(this.toX, this.toY, this.toZ, toName);
     }
+    public void setId(long id){
+        this.id = id;
+    }
 
     public double getDistance() {
         return this.distance;
@@ -207,9 +208,8 @@ public class Route{
         return (this.toX + this.toY + this.toZ);
     }
     public Date getCreationDate(){
-        return this.creationDate;
+        return creationDate;
     }
-    public static final String black = "\u001B[0m";
-    public static final String purple = "\u001B[35m";
+
 
 }

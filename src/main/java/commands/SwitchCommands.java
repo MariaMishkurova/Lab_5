@@ -3,7 +3,7 @@ package commands;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import Files.FileFilling;
+import Files.*;
 import Main_part.*;
 public class SwitchCommands {
     public static void switchCommands(BufferedReader br) throws IOException {
@@ -38,13 +38,13 @@ public class SwitchCommands {
                 }
                 case "add" -> {
                     var add = new Add();
-                    add.addNew(br, true);
+                    add.addNew(br);
                     switchCommands(br);
                 }
                 case "update" -> {
                     try {
                         Long id = Long.parseLong(parts[1]);
-                        Update.update(br, id, true);
+                        Update.update(br, id);
                         switchCommands(br);
                     } catch (NumberFormatException e) {
                         System.out.println(Style.RED + "Введите корректный запрос(неверный id)" + Style.BLACK);
@@ -71,13 +71,9 @@ public class SwitchCommands {
                     switchCommands(br);
                 }
                 case "save" -> {
-                    if (!Route.routes.isEmpty()) {
-                        var fileFill = new FileFilling();
-                        fileFill.write();
-                        System.out.println(Style.GREEN + "Элементы сохранены" + Style.BLACK);
-                    } else {
-                        System.out.println(Style.RED + "Сохранять нечего" + Style.BLACK);
-                    }
+                    var fileFill = new FileFilling();
+                    fileFill.write();
+                    System.out.println(Style.GREEN + "Элементы сохранены" + Style.BLACK);
                     switchCommands(br);
                 }
                 case "exit" -> System.exit(0);
@@ -87,12 +83,22 @@ public class SwitchCommands {
                     switchCommands(br);
                 }
                 case "remove_lower" -> {
-                    Remove.remove_lower(br, parts[1]);
-                    switchCommands(br);
+                    try {
+                        Remove.remove_lower(br, Double.parseDouble(parts[1]));
+                        switchCommands(br);
+                    } catch (NumberFormatException e) {
+                        System.out.println(Style.RED + "Введите корректный запрос(неверное значение дистанции)" + Style.BLACK);
+                        switchCommands(br);
+                    }
                 }
                 case "remove_greater" -> {
-                    Remove.remove_greater(br, parts[1]);
-                    switchCommands(br);
+                    try {
+                        Remove.remove_greater(br, Double.parseDouble(parts[1]));
+                        switchCommands(br);
+                    } catch (NumberFormatException e) {
+                        System.out.println(Style.RED + "Введите корректный запрос(неверное значение дистанции)" + Style.BLACK);
+                        switchCommands(br);
+                    }
                 }
                 case "remove_distance" -> {
                     try {

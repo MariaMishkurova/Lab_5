@@ -9,26 +9,19 @@ import java.util.Iterator;
 public class Remove {
 
     public static void remove_by_id(Long id) {
-        if (Route.routes.isEmpty()) {
-            System.out.println(Style.RED + "Действие невозможно" + Style.BLACK);
+        if (Route.routes.size() < id) {
+            System.out.println(Style.RED + "Действие невозможно(элемента с таким id не существует)" + Style.BLACK);
         } else {
-            if (!Route.used_id.contains(id)) {
-                System.out.println(Style.RED + "Элемент не найден" + Style.BLACK);
-            } else {
-                int i = 0;
-                for (Route r : Route.routes) {
-                    if (Route.routes.size() - i < 1) {
-                        System.out.println(Style.RED + "Элемент не найден" + Style.BLACK);
-                        break;
-                    }
+            Iterator<Route> iterator = Route.routes.iterator();
+                while (iterator.hasNext()) {
+                    Route r = iterator.next();
                     if (r.getId() == id) {
-                        Route.routes.remove(r);
+                        iterator.remove();
                         System.out.println(Style.GREEN + "Элемент коллекции удалён" + Style.BLACK);
                         break;
                     }
-                    i++;
                 }
-            }
+                rebuildArrayDeque(id);
         }
     }
 
@@ -39,46 +32,30 @@ public class Remove {
             System.out.println("Первый элемент коллекции:\n" + Route.routes.getFirst());
             Route.routes.removeFirst();
             System.out.println(Style.GREEN + "Первый элемент коллекции удалён" + Style.BLACK);
+            rebuildArrayDeque(1);
         }
     }
 
-    public static void remove_lower(BufferedReader br, String name) throws IOException {
-        if(!existName(name)) {
-            System.out.println(Style.RED + "Введите корректный запрос" + Style.BLACK);
-            SwitchCommands.switchCommands(br);
-        } else if(Route.routes.getFirst().getName().equals(name)){
-            System.out.println(Style.RED + "Действие невозможно" + Style.BLACK);
-        } else {
-        for (Route r : Route.routes) {
-            if (r.getName().equals(name)) {
-                break;
-            } else {
-                Route.routes.remove(r);
+    public static void remove_lower(BufferedReader br, double distance) throws IOException {
+        Iterator<Route> iterator = Route.routes.iterator();
+        while (iterator.hasNext()) {
+            Route r = iterator.next();
+            if(r.getDistance() < distance) {
+                iterator.remove();
                 System.out.println(Style.GREEN + "Элемент коллекции удалён" + Style.BLACK);
+                rebuildArrayDeque(r.getId());
             }
         }
-        }
     }
 
-    public static void remove_greater(BufferedReader br, String name) throws IOException {
-        if(!existName(name)){
-            System.out.println(Style.RED + "Введите корректный запрос" + Style.BLACK);
-            SwitchCommands.switchCommands(br);
-        } else if(Route.routes.getLast().getName().equals(name)){
-            System.out.println(Style.RED + "Действие невозможно" + Style.BLACK);
-        }
-        else {
-            Iterator<Route> iterator = Route.routes.iterator();
-            boolean a = false;
-            while (iterator.hasNext()) {
-               Route r = iterator.next();
-                if(a) {
-                    iterator.remove();
-                    System.out.println(Style.GREEN + "Элемент коллекции удалён" + Style.BLACK);
-                }
-                if (r.getName().equals(name)) {
-                  a = true;
-                }
+    public static void remove_greater(BufferedReader br, double distance) throws IOException {
+        Iterator<Route> iterator = Route.routes.iterator();
+        while (iterator.hasNext()) {
+            Route r = iterator.next();
+            if(r.getDistance() > distance) {
+                iterator.remove();
+                System.out.println(Style.GREEN + "Элемент коллекции удалён" + Style.BLACK);
+                rebuildArrayDeque(r.getId());
             }
         }
     }
@@ -92,9 +69,22 @@ public class Remove {
                     if (r.getDistance() == distance) {
                         iterator.remove();
                         System.out.println(Style.GREEN + "Элемент коллекции удалён" + Style.BLACK);
+                        rebuildArrayDeque(r.getId());
                     }
                 }
             }
+        }
+        private static void rebuildArrayDeque(long id){
+        if(!Route.routes.isEmpty()){
+            Iterator<Route> iterator = Route.routes.iterator();
+            while (iterator.hasNext()) {
+                Route r = iterator.next();
+                if (r.getId() > id) {
+                    long previousId = r.getId();
+                    r.setId(previousId-1);
+                }
+            }
+        }
         }
     private static boolean existName(String name){
         for (Route r : Route.routes) {

@@ -1,5 +1,6 @@
 package commands;
 import Files.FileFilling;
+import Files.XMLHandler;
 import Main_part.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -8,10 +9,6 @@ public class Execute_script {
     private final static ArrayList<String> executed_scripts = new ArrayList<>();
 //fileName - второе (из двух) слово в введённой строке
     public static void execute_script(BufferedReader br, String fileName) throws IOException {
-        if (executed_scripts.contains(fileName)) {
-            System.out.println("Повторное выполнение скрипта запрещено!!");
-            return;
-        } else {
             File file = new File(fileName);
             if (!file.exists()) {
                 System.out.println(Style.RED + "Файла не существует" + Style.BLACK);
@@ -46,23 +43,27 @@ public class Execute_script {
                         case "show" -> Show.show();
                         case "add" -> {
                             var add = new Add();
-                            add.addNew(buffReader, false);
+                            add.addNew(br);
                         }
                         case "update" -> {
                             try {
                                 Long id = Long.parseLong(lineParts[1]);
-                                Update.update(buffReader, id, false);
+                                Update.update(br, id);
                             } catch (NumberFormatException e) {
                                 System.out.println(Style.RED + "Файл содержит ошибку(неверный id)" + Style.BLACK);
                                 break outerLoop;
                             }
                         }
                         case "execute_script" -> {
+                            if (executed_scripts.contains(lineParts[1])) {
+                                System.out.println("Повторное выполнение скрипта запрещено!!");
+                                return;
+                            }
                             if (lineParts[1].equals(fileName)) {
                                 System.out.println(Style.RED + "Данный скрипт уже исполняется" + Style.BLACK);
-                            } else {
-                                execute_script(br, lineParts[1]);
+                                return;
                             }
+                                execute_script(br, lineParts[1]);
                         }
 
                         case "remove_id" -> {
@@ -77,21 +78,30 @@ public class Execute_script {
                         case "clear" -> Clear.clear();
 
                         case "save" -> {
-                            if (!Route.routes.isEmpty()) {
                                 var fileFill = new FileFilling();
                                 fileFill.write();
-                                System.out.println(Style.RED + "Элементы сохранены" + Style.BLACK);
-                            } else {
-                                System.out.println(Style.RED + "Сохранять нечего" + Style.BLACK);
-                            }
+                                System.out.println(Style.GREEN + "Элементы сохранены" + Style.BLACK);
                         }
                         case "exit" -> System.exit(0);
 
                         case "remove_head" -> Remove.remove_head();
 
-                        case "remove_lower" -> Remove.remove_lower(br, lineParts[1]);
-                        case "remove_greater" -> Remove.remove_greater(br, lineParts[1]);
-
+                        case "remove_lower" -> {
+                            try {
+                                Remove.remove_lower(br, Double.parseDouble(lineParts[1]));
+                            } catch (NumberFormatException e) {
+                                System.out.println(Style.RED + "Файл содержит ошибку(введено не число)" + Style.BLACK);
+                                break outerLoop;
+                            }
+                        }
+                        case "remove_greater" -> {
+                            try {
+                                Remove.remove_greater(br, Double.parseDouble(lineParts[1]));
+                            } catch (NumberFormatException e) {
+                                System.out.println(Style.RED + "Файл содержит ошибку(введено не число)" + Style.BLACK);
+                                break outerLoop;
+                            }
+                        }
                         case "remove_distance" -> {
                             try {
                                 Double distance = Double.parseDouble(lineParts[1]);
@@ -125,6 +135,5 @@ public class Execute_script {
                 buffReader.close();
                 SwitchCommands.switchCommands(br);
             }
-        }
     }
 }

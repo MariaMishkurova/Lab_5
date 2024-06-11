@@ -1,3 +1,9 @@
 show
-remove_id 65477
-execute_script src/file/script2.txt
+remove_id 1
+show
+remove_head
+show
+remove_lower 4.5
+show
+remove_greater 7.9
+show

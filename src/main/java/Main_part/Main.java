@@ -1,6 +1,7 @@
 package Main_part;
 
 import Files.FileFilling;
+import Files.XMLHandler;
 import commands.Help;
 import commands.SwitchCommands;
 import java.io.BufferedReader;

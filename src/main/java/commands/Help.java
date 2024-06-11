@@ -12,8 +12,8 @@ public class Help{
                 + "save - " + Style.BLACK + "сохранить коллекцию в файл" + "\n" + Style.PURPLE + "execute_script (file_name)" + Style.BLACK + "- " +
                 "считать и исполнить скрипт " + "из указанного файла\n" + Style.PURPLE + "exit " + Style.BLACK + "- завершить программу " +
                 "(без сохранения в файл)\n" + Style.PURPLE + "remove_head" + Style.BLACK + " - вывести первый элемент коллекции и удалить его\n" +
-                Style.PURPLE + "remove_greater (name)" + Style.BLACK + " - удалить из коллекции все элементы, превышающие заданный\n" +
-                Style.PURPLE + "remove_lower (name)" + Style.BLACK + " - удалить из коллекции все элементы, меньшие, чем заданный\n" +
+                Style.PURPLE + "remove_greater (distance)" + Style.BLACK + " - удалить из коллекции все элементы, превышающие заданный\n" +
+                Style.PURPLE + "remove_lower (distance)" + Style.BLACK + " - удалить из коллекции все элементы, меньшие, чем заданный\n" +
                 Style.PURPLE + "remove_distance (distance) " + Style.BLACK + "- удалить из коллекции все элементы, значение " +
                 "поля distance которого эквивалентно заданному\n" + Style.PURPLE + "min_to" + Style.BLACK + "- вывести любой объект из коллекции," +
                 " значение поля to которого является минимальным\n" + Style.PURPLE + "filter_distance (distance) " + Style.BLACK + " -" +

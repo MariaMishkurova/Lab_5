@@ -6,7 +6,10 @@
 
     <groupId>org.example</groupId>
     <artifactId>lab_5</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <version>1.0</version>
+    <name>lab5</name>
+    <url>http://maven.apache.org</url>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -35,5 +38,6 @@
             <version>3.3.0</version>
         </dependency>
     </dependencies>
+
 
 </project>
