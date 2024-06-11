@@ -14,8 +14,11 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.SAXParser;
@@ -27,7 +30,7 @@ public class FileFilling {
     public static ArrayList<Long> id_in_xml = new ArrayList<>();
     String fileName;
 
-    public void write() throws IOException {
+    public void write(boolean save) throws IOException {
 //getHome() - метод для нахождения переменной окружения home
         fileName = getHome() + "/Route.xml";
         File file = new File(fileName);
@@ -55,17 +58,19 @@ public class FileFilling {
             document.appendChild(headElement);
 
             //не получается парсить - значит нечего копировать, не делаем это
-            try {
-                parser.parse(file, handler);
-            } catch (org.xml.sax.SAXParseException | IllegalArgumentException e) {
+            if(!save) {
+                try {
+                    parser.parse(file, handler);
+                } catch (org.xml.sax.SAXParseException | IllegalArgumentException e) {
+                }
             }
 
             for (Route r : Route.routes) {
                     Element routeElement = document.createElement("Route");
-                    //routeElement.appendChild(getRouteElements(document, "id", String.valueOf(r.getId())));
+                    routeElement.appendChild(getRouteElements(document, "id", String.valueOf(r.getId())));
                     routeElement.appendChild(getRouteElements(document, "name", r.getName()));
-               // SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                    //routeElement.appendChild(getRouteElements(document, "creationDate", formater.format(r.getCreationDate())));
+                SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    routeElement.appendChild(getRouteElements(document, "creationDate", formater.format(r.getCreationDate())));
                     routeElement.appendChild(getRouteElements(document, "coordinates", r.getCoordinates()));
                     routeElement.appendChild(getRouteElements(document, "from", r.getFrom()));
                     routeElement.appendChild(getRouteElements(document, "to", r.getTo()));
@@ -93,3 +98,97 @@ public class FileFilling {
 
 }
 
+class XMLHandler extends DefaultHandler {
+    String name, coordinates, from, to, distance,  lastElementName, findText;
+    ArrayList <Float> findNum = new ArrayList<>();
+    @Override
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
+        lastElementName = qName;
+    }
+
+    @Override
+    public void characters(char[] ch, int start, int length) {
+        String information = new String(ch, start, length);
+
+        information = information.replace("\n", "").trim();
+
+        if (!information.isEmpty()) {
+            if (lastElementName.equals("name")) {
+                name = information;
+            }
+            if (lastElementName.equals("coordinates")) {
+                coordinates = information;
+            }
+            if (lastElementName.equals("from")) {
+                from = information;
+            }
+            if (lastElementName.equals("to")) {
+                to = information;
+            }
+            if (lastElementName.equals("distance")) {
+                distance = information;
+            }
+        }
+    }
+    @Override
+    public void endElement(String uri, String localName, String qName) {
+        if ( (name != null && !name.isEmpty()) &&
+                (coordinates != null && !coordinates.isEmpty()) && (from != null && !from.isEmpty()) && (to != null && !to.isEmpty()) &&
+                (distance != null && !distance.isEmpty()))
+        {
+
+            findNumers(coordinates);
+            double coordinatesX = (double) findNum.get(0);
+            double coordinatesY = (double) findNum.get(1);
+            findNum.clear();
+
+            findNumers(from);
+            float fromX = findNum.get(0);
+            long fromY =  Math.round(findNum.get(1));
+            int fromZ =  Math.round(findNum.get(2));
+            String fromName;
+            try {
+                fromName = String.valueOf(findNum.get(3));
+            } catch (IndexOutOfBoundsException e){
+                fromName = findText;
+            }
+
+            findNum.clear();
+
+            findNumers(to);
+            double toX = (double) findNum.get(0);
+            double toY = (double) findNum.get(1);
+            double toZ = (double) findNum.get(2);
+            String toName;
+            try {
+                toName = String.valueOf(findNum.get(3));
+            } catch (IndexOutOfBoundsException e){
+                toName = findText;
+            }
+            findNum.clear();
+
+            Double rDistance = Double.parseDouble(distance);
+
+
+                new Route(name, coordinatesX, coordinatesY, fromX, fromY, fromZ, fromName,
+                        toX, toY, toZ, toName, rDistance);
+
+            name = null;
+            coordinates = null;
+            from = null;
+            to = null;
+            distance = null;
+        }
+    }
+    private void findNumers(String str){
+        String parts[] = str.split(" ");
+        for (int i=0; i<parts.length; i++) {
+            try {
+                findNum.add(Float.parseFloat(parts[i]));
+            } catch(java.lang.NumberFormatException e){
+                findText = parts[i];
+            }
+        }
+    }
+
+}

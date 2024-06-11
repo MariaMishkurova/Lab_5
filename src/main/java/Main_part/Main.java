@@ -1,7 +1,6 @@
 package Main_part;
 
 import Files.FileFilling;
-import Files.XMLHandler;
 import commands.Help;
 import commands.SwitchCommands;
 import java.io.BufferedReader;
@@ -15,7 +14,7 @@ public class Main {
         System.out.println("ВВЕДИТЕ ОДНУ ИЗ КОМАНД:");
         Help.help();
         var fileFill = new FileFilling();
-        fileFill.write();
+        fileFill.write(false);
         var br = new BufferedReader(new InputStreamReader(System.in));
         SwitchCommands.switchCommands(br);
     }

@@ -1,6 +1,5 @@
 package commands;
 import Files.FileFilling;
-import Files.XMLHandler;
 import Main_part.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -79,7 +78,7 @@ public class Execute_script {
 
                         case "save" -> {
                                 var fileFill = new FileFilling();
-                                fileFill.write();
+                                fileFill.write(true);
                                 System.out.println(Style.GREEN + "Элементы сохранены" + Style.BLACK);
                         }
                         case "exit" -> System.exit(0);

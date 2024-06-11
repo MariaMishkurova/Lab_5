@@ -72,7 +72,7 @@ public class SwitchCommands {
                 }
                 case "save" -> {
                     var fileFill = new FileFilling();
-                    fileFill.write();
+                    fileFill.write(true);
                     System.out.println(Style.GREEN + "Элементы сохранены" + Style.BLACK);
                     switchCommands(br);
                 }
